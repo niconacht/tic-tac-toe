@@ -15,15 +15,16 @@ const playGame = (function(e) {
     const player1 = newPlayer("X", true);
     const player2 = newPlayer("O", false);
     let activePlayer = player1;
-   
-    const filterMoves = function(playertype) {
-         const moves = gameProgress.filter(arr => arr[0] === playertype);
-         //müssen hier nicht die cell ids als array returned werden? 
-         return moves;
-    };
-    const player1Moves = filterMoves(player1.type);
-    const player2Moves = filterMoves(player2.type);
+    const symbol1 = player1.type;
+    const symbol2 = player2.type;
+    
+    
+    
+    
+    
     const cells = Array.from(document.getElementsByClassName("cell"));
+    
+    
     const winningConditions = [
         [0, 1, 2],
         [3, 4, 5],
@@ -41,12 +42,29 @@ const playGame = (function(e) {
     };
 
      
-
     const evalWinner = function(){
+        const filterMoves = function(arr, symbol){
+            let new_arr = [];
+            
+            for (let i = 0; i < arr.length; i++) {
+                console.log(arr[i][0]);
+                if (arr[i][0] === symbol){
+                    console.log(arr[i][1])
+                    new_arr.push[arr[i][1]];
+                }
+                //console.log(new_arr)
+                return new_arr;
+    
+            }
+        }    
+        
+        const player1Moves = filterMoves(gameProgress, symbol1);
+        const player2Moves = filterMoves(gameProgress, symbol2);
+        
         //get minimum number of start checking for winner(depending on the size of the gameboard)
         let min_turns = (Math.sqrt(document.getElementsByClassName("cell").length)*2) -1;
         if (gameProgress.length >= min_turns) {
-            console.log(player1Moves);
+       
             for (let i = 0; i < winningConditions.length; i++){
                 let winner1 = winningConditions[i].every(v => player1Moves.includes(v));    
                     console.log(winner1);
@@ -54,7 +72,7 @@ const playGame = (function(e) {
                     //announce winner
                     //stop game
                         console.log("Player 1 wins")
-                }
+                }                                           //check if every cell in winningcondition-elem is marked by same player
                     if(winningConditions[i].every(val => player2Moves.includes(val))){
                     //announce winner
                     //stop game
@@ -82,6 +100,7 @@ const playGame = (function(e) {
            if (e.target.textContent === ""){
                 e.target.textContent = activePlayer.type;
                 gameProgress.push([activePlayer.type, e.target.id]);
+                console.log(gameProgress)
                 changePlayer(player1, player2);
                 evalWinner();
            }
