@@ -52,22 +52,28 @@ const playGame = (function(e) {
         let player2Moves = filterPlayerMoves(gameProgress, symbol2);
         let min_turns = (Math.sqrt(document.getElementsByClassName("cell").length)*2) -1;
         let winner;
+        //console.log(player1Moves);
+        //console.log(player2Moves);
+        let isWinning = (playerMoves, conditions) => conditions.every(v => playerMoves.includes(v));
         for (let i = 0; i < winningConditions.length; i++){
+            console.log(winningConditions[i]);
         //     if (gameProgress.length >= min_turns) {
-            for (let j = 0; j < winningConditions[j].length; j++){
-                if (player1Moves.includes(winningConditions[i][j])) {
-                    console.log("test")
-                    return (player1);
-                }
-            }
-        }        
+               let player1wins = isWinning(player1Moves, winningConditions[i]);
+               let player2wins = isWinning(player2Moves, winningConditions[i]);
+        console.log(player1wins);
+        console.log(player2wins);
+        
+        }
+        
+                
+    }        
         //              winner = player1;
         //         }
         //     }
         // }
         // return winner;
 
-    }
+    
 
     
     return {
@@ -76,8 +82,7 @@ const playGame = (function(e) {
            if (e.target.textContent === ""){
                 e.target.textContent = activePlayer.type;
                 gameProgress.push([activePlayer.type, e.target.id]);
-                console.log(gameProgress);
-                console.log(evalWinner());
+                evalWinner();
                 changePlayer(player1, player2);    
            }
        }    
