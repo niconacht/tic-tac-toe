@@ -30,12 +30,24 @@ const manageSettings = (function() {
 //Display Module
 const displayController = (function(){
 
+    function setColor(target, activeplayer, player1, player2) {
+        if (activeplayer === player1) {
+            
+            target.className += " styling1";
+        }
+
+        if(activeplayer === player2) {
+            target.className += " styling2";
+        }
+        console.log(target);
+    }
+
     function showResult() {
 
     }
     //helper function?
     function hideGameboard(){
-
+ 
     }
 
     function showSettings(){
@@ -43,6 +55,7 @@ const displayController = (function(){
     }
 
     return {
+        setColor,
 
     }
 })();
@@ -72,11 +85,14 @@ const playGame = (function(e) {
 
     //if field is empty, player can place her symbol, store choice in array, change turn
     const makeMove = function(e) {
+        
         if (e.target.textContent === ""){
+            displayController.setColor(e.target, activePlayer, player1, player2);
              e.target.textContent = activePlayer.type;
              gameProgress.push([activePlayer.type, e.target.id]);
              evalWinner();
-             changePlayer(player1, player2);    
+             changePlayer(player1, player2);
+               
         }
     }    
 
@@ -92,7 +108,7 @@ const playGame = (function(e) {
     }
 
 
-    //filter den GAmeprogress nach Spielern  --> make this arr.filter!!!
+    //filter den Gameprogress nach Spielern  --> make this arr.filter!!!
     function filterPlayerMoves(arr, symbol) {
         let new_arr = [];
         for (let i = 0; i < arr.length; i++) {
@@ -135,39 +151,64 @@ const playGame = (function(e) {
     };       
   
     return {
+        activePlayer,
+        gameProgress,
         isEmpty,
         makeMove,
         evalWinner,
     };
 })();
 
-//AI-LOGIC 
+
+
+//Set AI
     //Computer makes random move --> room for optimization (optimal choice, minimax...)
 
+const againstComputer = (function() {
 
-const againstComputer = (function () {
+    const namefield  = document.getElementById("player2");
 
-    function playAi(e) {
-        if (e.target.id = "playAi"){
-           // if active player = computer player
-            //-->  not makeMove but computerMove --> ...siehe playGame, ersetze function bei startGame
+    function changeToComputer(e) {
+        if (e.target.id = "playAi"){      
+            namefield.dataName="Ai";
+            namefield.textContent = "Ai";
         }
+    }
 
+    function makeComputerMove(){
+      
+       //displayController.setColor(e.target);
+       if (activePlayer.type === "0") {
+            const cellsToChoose = cells.filter(playGame.isEmpty);
+            const computerChoice = cellsToChoose[Math.floor(Math.random() * cellsToChoose.length)];
+            computerChoice.textContent = "O";
+            playGame.gameProgress.push([activePlayer.type, computerChoice.id]);
+            evalWinner();  
+            changePlayer(player1, player2);
+       }
+       else {
+           playGame.makeMove();
 
+       }
+       
     }
     return {
-        playAi,
+        namefield,
+        changeToComputer,
+        makeComputerMove
     }
 
 })();
 
-function startGame()
+function startGame(){
     const container = document.getElementById("gameboard");
-    container.addEventListener("click",playGame.makeMove); 
-    
-    const settings = document.getElementById("settings-form");
-    settings.addEventListener("click", playAi)
+    if (againstComputer.namefield.dataName == "Ai")
+        container.addEventListener("click", againstComputer.makeComputerMove); 
 
+    else {
+        container.addEventListener("click", playGame.makeMove);
+    }
+}
 startGame();
 //////////////////////////////////////////////////////////////////////
 
