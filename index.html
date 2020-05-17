@@ -26,20 +26,21 @@
             <div class="cell bottom middle" id="7"></div>
             <div class="cell bottom right" id="8"></div>  
         </div>
-        <div class="hidden" id="settings-card">
-            <form id="settings-form" method="post" style="display: none">
-                <label>Player1 Name<input type = "text" name="player1" id="name1"></label>
-                <label>Player2 Name<input type = "text" name="player2" id="name2"></label>
-                <button class="btn" id="playAi">Play against Computer</label>
-                <div class="btn-container"><button class="btn" id="save-btn">Save</button></div>
-                <div class="btn-container"><button class="btn" id="cancel-btn">Cancel</button></div>
-            </form>
-        </div>
+       
         <div class="menu">
+            <button class="btn" id="settings-btn">Settings</button>
             <button class="btn">Reset</button>
-            <!-- <button class="btn" id="settings-btn">Cancel</button> -->
         </div>
     </main>
+    <div id="settings-card" class="hidden active-settings">
+        <form id="settings-form" method="post">
+            <label>Player1 Name<input type = "text" name="player1" class="sts" id="name1"></label>
+            <label>Player2 Name<input type = "text" name="player2" class="sts" id="name2"></label>
+            <button class="btn" id="playAi">Play against Computer</button>
+            <button class="btn sts" id="cancel-btn">Cancel</button>
+            <button class="btn sts" id="save-btn">Save</button>
+        </form>
+    </div>
   
     
     <script src="script.js"></script>

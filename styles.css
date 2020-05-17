@@ -1,3 +1,7 @@
+:root {
+    --player1-color: rgb(247, 120, 2);
+    --player2-color: rgb(181, 17, 247);
+}
 body {
     /* background-color: rgb(240, 242, 243); */
     background-color: black;
@@ -7,7 +11,7 @@ body {
 
 header {
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 h1 {
@@ -23,13 +27,14 @@ main {
     align-items: center;
 }
 
-/* .players-menu {
-    width: 90%;
-    display: inherit;
-    font-size: 2.3rem;
+#players-menu {
+    width: 50vw;
+    display: flex;
+    font-size: 2.2rem;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
-} */
+    margin-bottom: 3rem;
+
+}
 
 /* .settings-menu {
     position: fixed;
@@ -63,35 +68,72 @@ main {
     align-items: center;
     font-size: 5rem;
     background-color: black;
-    //border-radius: 15px;
-    
-    /* -webkit-box-shadow: 10px 10px 13px -2px rgba(225,228,230,0.65);
-    -moz-box-shadow: 10px 10px 13px -2px rgba(225,228,230,0.65);
-    box-shadow: 10px 10px 13px -2px rgba(225,228,230,0.65);  */
-
 }
 
 .styling1 {
     
-    color: rgb(247, 120, 2);
+    color: var(--player1-color);
 
 }
 
 .styling2{
-    color: rgb(181, 17, 247);
+    color: var(--player2-color);
+}
+
+.menu {
+    margin: 2em auto;
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
 }
     
-/* .win {
-    background-color: rgba(255, 255, 255, 0.07);
-} */
-
-/* .top, .center {
-    border-bottom: 1px solid black;
+.btn {
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  /* show a hand cursor on hover; some argue that we
+  should keep the default arrow cursor for buttons */
+  cursor: pointer;
+  font-size: 2em;
+ 
+}
+.btn:hover {
+   
+    background-color: #f3ec78;
+    background-image: linear-gradient(45deg, var(--player1-color), var(--player2-color));
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-text-fill-color: transparent;
+    
 }
 
-.left, .middle {
-    border-right: 1px solid black;
-} */
+.sts {
+    margin: 1.5rem;
+}
+
+.active-settings {
+   
+    width: 100vw; 
+    height: 100vh;
+    height: 100vh;
+    text-align: center;
+    margin: 0 auto;
+}
+
+#settings-form {
+    width: 50vw;
+    border: 2px solid white;
+    border-radius: 15px;
+    display:flex;
+    flex-direction: column;
+    padding: 3em;
+    margin: 0 auto;
+}
+
 
 .hidden {
     display: none;

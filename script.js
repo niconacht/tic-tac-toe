@@ -1,7 +1,7 @@
 'use strict';
 
 //Playerfactory
-function newPlayer (type, active) {
+function newPlayer (type, active,) {
     return {
         type,
         active,
@@ -30,14 +30,20 @@ const manageSettings = (function() {
 //Display Module
 const displayController = (function(){
 
-    function setColor(target, activeplayer, player1, player2) {
+    function setColor(target, activeplayer, player1, player2, id1, id2, class1, class2 ) {
+
+
         if (activeplayer === player1) {
-            
-            target.className += " styling1";
+            document.getElementById(id2).classList.remove(class2);
+            document.getElementById(id1).classList.add(class1);
+            target.classList.add(class1);
         }
 
         if(activeplayer === player2) {
-            target.className += " styling2";
+            document.getElementById(id1).classList.remove(class1);
+            document.getElementById(id2).classList.add(class2);
+            target.classList.add(class2);
+           
         }
         console.log(target);
     }
@@ -45,20 +51,24 @@ const displayController = (function(){
     function showResult() {
 
     }
-    //helper function?
-    function hideGameboard(){
- 
-    }
+
 
     function showSettings(){
+        document.querySelector("main").classList.add("hidden");
+        document.getElementById("settings-card").classList.remove("hidden");
 
     }
+
 
     return {
         setColor,
+        showSettings
+        
 
     }
 })();
+
+
 
 
 //Game_logic Module
@@ -87,7 +97,7 @@ const playGame = (function(e) {
     const makeMove = function(e) {
         
         if (e.target.textContent === ""){
-            displayController.setColor(e.target, activePlayer, player1, player2);
+            displayController.setColor(e.target, activePlayer, player1, player2, "player1", "player2", "styling1", "styling2");
              e.target.textContent = activePlayer.type;
              gameProgress.push([activePlayer.type, e.target.id]);
              evalWinner();
@@ -213,7 +223,8 @@ startGame();
 //////////////////////////////////////////////////////////////////////
 
 //Eventhandlers
-//document.addEventListener("DOMContentLoaded", startGame);
+const setBtn = document.getElementById("settings-btn");
+setBtn.addEventListener("click", displayController.showSettings);
 
 
 
