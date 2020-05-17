@@ -59,15 +59,43 @@ const displayController = (function(){
 
     }
 
+    function hideSettings(){
+        document.querySelector("main").classList.remove("hidden");
+        document.getElementById("settings-card").classList.add("hidden");
+    }
+
+    function saveSettings(e) {
+        e.preventDefault();
+        if (e.target.id ="save-btn") {
+            const nameChange = Array.from(document.getElementsByClassName("name-input"));
+            console.log(nameChange)
+            if(nameChange[0].value) {
+                   document.getElementById("player1").textContent = nameChange[0].value;
+                }
+
+            if( nameChange[1].value) {
+                    document.getElementById("player2").textContent = nameChange[1].value;
+            }
+
+            
+            if(document.getElementById("playAi").checked) {
+                console.log("works");
+                document.getElementById("player2").textContent = "Computer";
+                }
+            }
+
+            hideSettings();
+                          
+        }  
+    
 
     return {
         setColor,
-        showSettings
-        
+        showSettings,
+        saveSettings,        
 
     }
 })();
-
 
 
 
@@ -175,15 +203,18 @@ const playGame = (function(e) {
     //Computer makes random move --> room for optimization (optimal choice, minimax...)
 
 const againstComputer = (function() {
-
-    const namefield  = document.getElementById("player2");
-
-    function changeToComputer(e) {
-        if (e.target.id = "playAi"){      
-            namefield.dataName="Ai";
-            namefield.textContent = "Ai";
-        }
+    if(document.getElementById("playAi").checked) {
+        document.getElementById("Ai-label").textContent ="You play against Computer"
     }
+
+    // const namefield  = document.getElementById("player2");
+
+    // function changeToComputer(e) {
+    //     if (e.target.id = "playAi"){      
+    //         namefield.dataName="Ai";
+    //         namefield.textContent = "Ai";
+    //     }
+    // }
 
     function makeComputerMove(){
       
@@ -203,8 +234,8 @@ const againstComputer = (function() {
        
     }
     return {
-        namefield,
-        changeToComputer,
+        //namefield,
+        //changeToComputer,
         makeComputerMove
     }
 
@@ -212,12 +243,12 @@ const againstComputer = (function() {
 
 function startGame(){
     const container = document.getElementById("gameboard");
-    if (againstComputer.namefield.dataName == "Ai")
-        container.addEventListener("click", againstComputer.makeComputerMove); 
+    // if (document.getElementById("playAi").checked)
+    //     container.addEventListener("click", againstComputer.makeComputerMove); 
 
-    else {
+    //else {
         container.addEventListener("click", playGame.makeMove);
-    }
+   // }
 }
 startGame();
 //////////////////////////////////////////////////////////////////////
@@ -226,5 +257,6 @@ startGame();
 const setBtn = document.getElementById("settings-btn");
 setBtn.addEventListener("click", displayController.showSettings);
 
-
+const inputSubmit = document.getElementById("save-btn");
+inputSubmit.addEventListener("click", displayController.saveSettings);
 

@@ -11,9 +11,9 @@
         <h1>TIC TAC TOE</h1>
     </header>
     <main>
-        <div id="players-menu">
-            <div id="player1" data-name="Player1">Player1</div>
-            <div id="player2" data-name="Player2">Player2</div>
+        <div class= "menu" id="players-menu">
+            <div class="player" id="player1" data-name="Player1">Player1</div>
+            <div class="player" id="player2" data-name="Player2">Player2</div>
         </div>
         <div id="gameboard">
             <div class="cell top left " id="0"></div>
@@ -34,9 +34,11 @@
     </main>
     <div id="settings-card" class="hidden active-settings">
         <form id="settings-form" method="post">
-            <label>Player1 Name<input type = "text" name="player1" class="sts" id="name1"></label>
-            <label>Player2 Name<input type = "text" name="player2" class="sts" id="name2"></label>
-            <button class="btn" id="playAi">Play against Computer</button>
+            <label>Player1 Name<input type = "text" name="player1" class=" name-input sts" id="name1"></label>
+            <label>Player2 Name<input type = "text" name="player2" class="name-input sts" id="name2"></label>
+            <!-- <button class="btn" id="playAi">Play against Computer</button> -->
+            <input type="checkbox" class="btn" id="playAi" name="Ai" value="playAi">
+            <label for="Ai" class="btn" id="Ai-label">Play Against Computer?</label>
             <button class="btn sts" id="cancel-btn">Cancel</button>
             <button class="btn sts" id="save-btn">Save</button>
         </form>
