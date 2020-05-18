@@ -142,7 +142,7 @@ input[type='checkbox'] { display:none; }
 
 }
 /* Styling for labels when corresponding checkbox is checked */
-input[type='checkbox']:checked + label {
+input:checked + label {
     color: red;
     
 }

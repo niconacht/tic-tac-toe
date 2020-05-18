@@ -1,0 +1,48 @@
+const makeHumanMove = function() {
+    document.addEventListener("click", function(e) {
+        if (e.target.textContent === ""){
+            displayController.setColor(e.target, activePlayer, player1, player2, "player1", "player2", "styling1", "styling2");
+            e.target.textContent = activePlayer.type;
+            gameProgress.push([activePlayer.type, e.target.id]);
+            evalWinner();
+            changePlayer(player1, player2);
+            var event = new Event("event");
+            console.log(event);
+            document.dispatchEvent(event);
+            if(document.getElementById("player2").textContent = "Computer"){
+                makeComputerMove();
+            }
+        }
+    })
+     
+}  
+
+const makeMove = function (){
+    if(document.getElementById("player2").textContent = "Computer"){
+        // document.addEventListener("event", function(e){
+        //     console.log("works")
+            const cellsToChoose = playGame.cells.filter(playGame.isEmpty);
+            const computerChoice = cellsToChoose[Math.floor(Math.random() * cellsToChoose.length)];
+            computerChoice.textContent = "O";
+            playGame.gameProgress.push([activePlayer.type, computerChoice.id]);
+            evalWinner();  
+            changePlayer(player1, player2);
+        })
+        else {
+            makeHumanMove();
+        }
+    }
+           
+    
+};
+
+// const computerOrHuman = function(){
+        
+    //     if(document.getElementById("name2").value === "Computer" && activePlayer === player2){
+    //         computerPlay.makeComputerMove();
+    //     }
+    //     else{
+    //         playGame.makeHumanMove();
+    //     }
+    // }
+  

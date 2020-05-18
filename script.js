@@ -1,37 +1,18 @@
 'use strict';
 
 //Playerfactory
-function newPlayer (type, active,) {
+function newPlayer (type, active,isHuman) {
     return {
         type,
         active,
+        isHuman
     }
-}
-
-
-//Settings Module
-const manageSettings = (function() {
-   
-    //chooseName
-    
-    //choose Friend or AI
-
-    //
-   
-   
-   
-   
-    return {
-
-    }
-
-})();
+};
 
 //Display Module
 const displayController = (function(){
 
     function setColor(target, activeplayer, player1, player2, id1, id2, class1, class2 ) {
-
 
         if (activeplayer === player1) {
             document.getElementById(id2).classList.remove(class2);
@@ -42,17 +23,12 @@ const displayController = (function(){
         if(activeplayer === player2) {
             document.getElementById(id1).classList.remove(class1);
             document.getElementById(id2).classList.add(class2);
-            target.classList.add(class2);
-           
+            target.classList.add(class2);      
         }
         console.log(target);
     }
 
-    function showResult() {
-
-    }
-
-
+    
     function showSettings(){
         document.querySelector("main").classList.add("hidden");
         document.getElementById("settings-card").classList.remove("hidden");
@@ -64,50 +40,71 @@ const displayController = (function(){
         document.getElementById("settings-card").classList.add("hidden");
     }
 
-    function saveSettings(e) {
+    const saveSettings = function (e) {
         e.preventDefault();
-        if (e.target.id ="save-btn") {
+        
             const nameChange = Array.from(document.getElementsByClassName("name-input"));
             console.log(nameChange)
             if(nameChange[0].value) {
                    document.getElementById("player1").textContent = nameChange[0].value;
                 }
 
-            if( nameChange[1].value) {
+            if(nameChange[1].value) {
                     document.getElementById("player2").textContent = nameChange[1].value;
-            }
-
-            
-            if(document.getElementById("playAi").checked) {
-                console.log("works");
-                document.getElementById("player2").textContent = "Computer";
-                }
-            }
-
+            }        
             hideSettings();
-                          
-        }  
-    
+                           
+    }
+
+    const clearForm= function(e){
+        e.preventDefault();
+        document.getElementById("settings-form").reset();
+    }
+
+    function playAgainstHuman(e) {
+        e.preventDefault();
+        e.target.textContent= "You play against a friend";
+       document.getElementById("playAi").textContent ="Play against Computer?";     
+    }
+
+    function playAgainstComputer(e) {
+        e.preventDefault();
+        e.target.textContent ="You play against Computer";
+        document.getElementById("playHuman").textContent = "Play against Human?";
+        document.getElementById("name2").value = "Computer";
+        playGame.ishuman2 = false;
+        console.log(playGame.ishuman2);
+    }
+
+
+
+    function showResult() {
+
+    }
 
     return {
         setColor,
         showSettings,
-        saveSettings,        
+        saveSettings, 
+        clearForm,
+        playAgainstHuman,
+        playAgainstComputer      
 
     }
 })();
-
 
 
 //Game_logic Module
 const playGame = (function(e) {
 
     let gameProgress = []; 
-    const player1 = newPlayer("X", true);
-    const player2 = newPlayer("O", false);
+    const player1 = newPlayer("X", true, true);
+    const player2 = newPlayer("O", false, true);
     let activePlayer = player1;
     const symbol1 = player1.type;
     const symbol2 = player2.type;
+    const ishuman1 = player1.isHuman;
+    let ishuman2 = player2.isHuman;
     const cells = Array.from(document.getElementsByClassName("cell"));
     
     const winningConditions = [
@@ -121,19 +118,49 @@ const playGame = (function(e) {
         ["2", "4", "6"]
     ];
 
-    //if field is empty, player can place her symbol, store choice in array, change turn
-    const makeMove = function(e) {
-        
-        if (e.target.textContent === ""){
-            displayController.setColor(e.target, activePlayer, player1, player2, "player1", "player2", "styling1", "styling2");
-             e.target.textContent = activePlayer.type;
-             gameProgress.push([activePlayer.type, e.target.id]);
-             evalWinner();
-             changePlayer(player1, player2);
-               
-        }
-    }    
+   // if field is empty, player can place her symbol, store choice in array, change turn
+   const makeHumanMove = function() {
+        document.addEventListener("click", function(e) {
+            if (e.target.textContent === ""){
+                displayController.setColor(e.target, activePlayer, player1, player2, "player1", "player2", "styling1", "styling2");
+                e.target.textContent = activePlayer.type;
+                gameProgress.push([activePlayer.type, e.target.id]);
+                evalWinner();
+                changePlayer(player1, player2);
+                nextMove();
+            }
+        })
+    }
 
+    const makeComputerMove = function() {
+        console.log("does work")
+        const cellsToChoose = playGame.cells.filter(playGame.isEmpty);
+        const computerChoice = cellsToChoose[Math.floor(Math.random() * cellsToChoose.length)];
+        computerChoice.textContent = "O";
+        playGame.gameProgress.push([activePlayer.type, computerChoice.id]);
+        evalWinner();  
+        changePlayer(player1, player2);
+        nextMove();
+    }
+
+    const nextMove = function() {
+        console.log("nextMove");
+        console.log(activePlayer);
+        console.log(ishuman2);
+        if(activePlayer === player1){
+            makeHumanMove();
+        }
+        else if(activePlayer === player2){
+            if (ishuman2 === true){
+                makeHumanMove();
+            }
+            else if(ishuman2 === false){
+                makeComputerMove();
+            }
+        }
+    }
+     
+    
     const changePlayer = function(player1, player2) {
         return (activePlayer = activePlayer.type === "X"?  player2 : player1);
     };
@@ -156,6 +183,7 @@ const playGame = (function(e) {
         }
         return new_arr;
     };
+
 
     function evalWinner() {
         let player1Moves = filterPlayerMoves(gameProgress, symbol1);
@@ -186,77 +214,31 @@ const playGame = (function(e) {
                 }
             }
         }           
-    };       
-  
+    }
+    
+    
     return {
+        cells,
+        player1,
+        player2,
+        ishuman1,
+        ishuman2,
         activePlayer,
         gameProgress,
         isEmpty,
-        makeMove,
         evalWinner,
+        nextMove
     };
 })();
+ 
 
-
-
-//Set AI
-    //Computer makes random move --> room for optimization (optimal choice, minimax...)
-
-const againstComputer = (function() {
-    if(document.getElementById("playAi").checked) {
-        document.getElementById("Ai-label").textContent ="You play against Computer"
-    }
-
-    // const namefield  = document.getElementById("player2");
-
-    // function changeToComputer(e) {
-    //     if (e.target.id = "playAi"){      
-    //         namefield.dataName="Ai";
-    //         namefield.textContent = "Ai";
-    //     }
-    // }
-
-    function makeComputerMove(){
-      
-       //displayController.setColor(e.target);
-       if (activePlayer.type === "0") {
-            const cellsToChoose = cells.filter(playGame.isEmpty);
-            const computerChoice = cellsToChoose[Math.floor(Math.random() * cellsToChoose.length)];
-            computerChoice.textContent = "O";
-            playGame.gameProgress.push([activePlayer.type, computerChoice.id]);
-            evalWinner();  
-            changePlayer(player1, player2);
-       }
-       else {
-           playGame.makeMove();
-
-       }
-       
-    }
-    return {
-        //namefield,
-        //changeToComputer,
-        makeComputerMove
-    }
-
-})();
-
-function startGame(){
-    const container = document.getElementById("gameboard");
-    // if (document.getElementById("playAi").checked)
-    //     container.addEventListener("click", againstComputer.makeComputerMove); 
-
-    //else {
-        container.addEventListener("click", playGame.makeMove);
-   // }
-}
-startGame();
+playGame.nextMove();
 //////////////////////////////////////////////////////////////////////
 
 //Eventhandlers
-const setBtn = document.getElementById("settings-btn");
-setBtn.addEventListener("click", displayController.showSettings);
 
-const inputSubmit = document.getElementById("save-btn");
-inputSubmit.addEventListener("click", displayController.saveSettings);
-
+document.getElementById("settings-btn").addEventListener("click", displayController.showSettings);
+document.getElementById("save-btn").addEventListener("click", displayController.saveSettings);
+document.getElementById("playHuman").addEventListener("click", displayController.playAgainstHuman);
+document.getElementById("playAi").addEventListener("click", displayController.playAgainstComputer);
+document.getElementById("cancel-btn").addEventListener("click", displayController.clearForm);
