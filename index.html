@@ -12,7 +12,7 @@
     </header>
     <main>
         <div class= "menu" id="players-menu">
-            <div class="player" id="player1" data-name="Player1">Player1</div>
+            <div class="player styling1" id="player1" data-name="Player1">Player1</div>
             <div class="player" id="player2" data-name="Player2">Player2</div>
         </div>
         <div id="gameboard">
@@ -29,18 +29,21 @@
        
         <div class="menu">
             <button class="btn" id="settings-btn">Settings</button>
-            <button class="btn">Reset</button>
+            <button class="btn" id="reset-btn">Reset</button>
         </div>
     </main>
-    <div id="settings-card" class="hidden active-settings">
+    <div class= "card hidden" id="settings-card">
         <form id="settings-form" method="post">
             <label>Player1 Name<input type = "text" name="player1" class=" name-input sts" id="name1"></label>
             <label>Player2 Name<input type = "text" name="player2" class="name-input sts" id="name2"></label>
-            <button class="btn sts playerChoice" id="playAi"    >Play Against Computer?</button>
+            <button class="btn sts playerChoice" id="playAi">Play Against Computer?</button>
             <button class="btn sts playerChoice" id="playHuman">Play Against Human?</button>
             <button class="btn sts" id="cancel-btn">Cancel</button>
             <button class="btn sts" id="save-btn">Save</button>
         </form>
+    </div>
+
+    <div class="card hidden" id="result-card">
     </div>
   
     

@@ -11,18 +11,21 @@ function newPlayer (type, active,isHuman) {
 
 //Display Module
 const displayController = (function(){
-
-    function setColor(target, activeplayer, player1, player2, id1, id2, class1, class2 ) {
+   let name1 =  document.getElementById("player1").textContent;
+   let name2 = document.getElementById("player2").textContent;
+   function setColor(target, activeplayer, player1, player2, id1, id2, class1, class2) {
 
         if (activeplayer === player1) {
-            document.getElementById(id2).classList.remove(class2);
-            document.getElementById(id1).classList.add(class1);
+            document.getElementById(id1).classList.remove(class1);
+            document.getElementById(id2).classList.add(class2);
+            
             target.classList.add(class1);
         }
 
         if(activeplayer === player2) {
-            document.getElementById(id1).classList.remove(class1);
-            document.getElementById(id2).classList.add(class2);
+            document.getElementById(id2).classList.remove(class2);
+            document.getElementById(id1).classList.add(class1);
+            
             target.classList.add(class2);      
         }
     }
@@ -43,7 +46,6 @@ const displayController = (function(){
         e.preventDefault();
         
             const nameChange = Array.from(document.getElementsByClassName("name-input"));
-            console.log(nameChange)
             if(nameChange[0].value) {
                    document.getElementById("player1").textContent = nameChange[0].value;
                 }
@@ -72,13 +74,29 @@ const displayController = (function(){
         document.getElementById("playHuman").textContent = "Play against Human?";
         document.getElementById("name2").value = "Computer";
         playGame.player2.isHuman = false;
-        console.log(playGame.player2.isHuman);
+
     }
 
 
+    function showResult(winner) {
+        document.querySelector("main").classList.add("hidden");
+        const resultCard = document.getElementById("result-card")
+        resultCard.classList.remove("hidden");
+        const result = document.createElement("p");
+        result.classList.add("result");
+        console.log(winner);
+        console.log(player1);
+        if (winner === playGame.player1){
+            result.textContent = `${name1} has won!`;
+        }
+        else if(winner == playGame.player2){
+            result.textContent = `${name2} has won!`;
 
-    function showResult() {
-
+        }
+        else {
+            result.textContent = "It's a tie"
+        }
+        resultCard.appendChild(result);
     }
 
     return {
@@ -87,7 +105,8 @@ const displayController = (function(){
         saveSettings, 
         clearForm,
         playAgainstHuman,
-        playAgainstComputer      
+        playAgainstComputer,
+        showResult      
 
     }
 })();
@@ -102,8 +121,6 @@ const playGame = (function(e) {
     let activePlayer = player1;
     const symbol1 = player1.type;
     const symbol2 = player2.type;
-    const ishuman1 = player1.isHuman;
-    let ishuman2 = player2.isHuman;
     const cells = Array.from(document.getElementsByClassName("cell"));
     
     const winningConditions = [
@@ -132,12 +149,12 @@ const playGame = (function(e) {
     }
 
     function makeComputerMove() {
-        console.log("does work");
+      
         const cellsToChoose = playGame.cells.filter(playGame.isEmpty);
         const computerChoice = cellsToChoose[Math.floor(Math.random() * cellsToChoose.length)];
         displayController.setColor(computerChoice, activePlayer, player1, player2, "player1", "player2", "styling1", "styling2");
         computerChoice.textContent = "O";
-        playGame.gameProgress.push([activePlayer.type, computerChoice.id]);
+        gameProgress.push([activePlayer.type, computerChoice.id]);
         evalWinner();  
         changePlayer(player1, player2);
         
@@ -167,7 +184,7 @@ const playGame = (function(e) {
     };
 
     const isEmpty = (cell) => {
-        if(!cell.textcontent){
+        if(cell.textContent ===""){
             return true;
         }
         return false;
@@ -187,34 +204,41 @@ const playGame = (function(e) {
 
 
     function evalWinner() {
+        
         let player1Moves = filterPlayerMoves(gameProgress, symbol1);
         let player2Moves = filterPlayerMoves(gameProgress, symbol2);
-
         let min_turns = (Math.sqrt(document.getElementsByClassName("cell").length)*2) -1;
         
         if (gameProgress.length >= min_turns) {
             for (let i = 0; i < winningConditions.length; i++){
-            const player1wins =  winningConditions[i].every(v => player1Moves.includes(v));
-            const player2wins =  winningConditions[i].every(v => player2Moves.includes(v));
-            
-            if (player1wins) {
-                console.log("Player1 wins");
-            }
-
-            else if(player2wins){
-                console.log("Player2 wins");
-            }
-
-            else {
-                const emptyCells = cells.filter(isEmpty);
-                if (!emptyCells) {
-                    console.log("It's a tie")
+                if (winningConditions[i].every(v => player1Moves.includes(v))) {
+                    displayController.showResult(player1);
                 }
-               // else {
-                //   continue;
+
+                else if( winningConditions[i].every(v => player2Moves.includes(v))){
+                    displayController.showResult(player2);
+                }
+                else {
+                    if (!cells.filter(isEmpty)) {
+                        displayController.showResult("No Winner");
+                    }
                 }
             }
         }           
+    }
+
+    function reset(){
+        document.addEventListener("click", function(e){
+            if(e.target.id ==="save-btn" || e.target.id ==="reset-btn"){
+                cells.forEach(function(cell){
+                    cell.textContent = "";
+                })
+                gameProgress = [];
+                document.getElementById("player2").classList.remove("styling2");
+                activePlayer = player1;
+                startGame();
+            }
+        })
     }
     
     
@@ -222,24 +246,29 @@ const playGame = (function(e) {
         cells,
         player1,
         player2,
-        ishuman1,
-        ishuman2,
         activePlayer,
         gameProgress,
         isEmpty,
         evalWinner,
-        nextMove
+        nextMove,
+        reset
     };
 })();
  
+function startGame(){
+    
+    document.getElementById("settings-btn").addEventListener("click", displayController.showSettings);
+    document.getElementById("save-btn").addEventListener("click", displayController.saveSettings);
+    document.getElementById("playHuman").addEventListener("click", displayController.playAgainstHuman);
+    document.getElementById("playAi").addEventListener("click", displayController.playAgainstComputer);
+    document.getElementById("cancel-btn").addEventListener("click", displayController.clearForm)
+    playGame.nextMove();
+    playGame.reset();
+}
 
-playGame.nextMove();
+startGame();
+
 //////////////////////////////////////////////////////////////////////
 
 //Eventhandlers
 
-document.getElementById("settings-btn").addEventListener("click", displayController.showSettings);
-document.getElementById("save-btn").addEventListener("click", displayController.saveSettings);
-document.getElementById("playHuman").addEventListener("click", displayController.playAgainstHuman);
-document.getElementById("playAi").addEventListener("click", displayController.playAgainstComputer);
-document.getElementById("cancel-btn").addEventListener("click", displayController.clearForm);

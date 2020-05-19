@@ -38,7 +38,7 @@ main {
 
 }
 .player {
-    padding: 1rem;
+    padding: 1rem;  
 
 }
 
@@ -91,14 +91,11 @@ main {
   font: inherit;
   color: inherit;
   background-color: transparent;
-  /* show a hand cursor on hover; some argue that we
-  should keep the default arrow cursor for buttons */
   cursor: pointer;
   font-size: 1.8em;
- 
 }
+
 .btn:hover {
-   
     background-color: #f3ec78;
     background-image: linear-gradient(45deg, var(--player1-color), var(--player2-color));
     background-size: 100%;
@@ -112,15 +109,18 @@ main {
 .sts {
     margin: 1.5rem;
 }
-
-.active-settings {
-   
+.result {
+    font-size: 5em;
+    font-style: italic;
+}
+.card {
     width: 100vw; 
     height: 100vh;
     height: 100vh;
     text-align: center;
     margin: 0 auto;
 }
+
 
 #settings-form {
     width: 50vw;
