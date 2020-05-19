@@ -25,7 +25,6 @@ const displayController = (function(){
             document.getElementById(id2).classList.add(class2);
             target.classList.add(class2);      
         }
-        console.log(target);
     }
 
     
@@ -72,8 +71,8 @@ const displayController = (function(){
         e.target.textContent ="You play against Computer";
         document.getElementById("playHuman").textContent = "Play against Human?";
         document.getElementById("name2").value = "Computer";
-        playGame.ishuman2 = false;
-        console.log(playGame.ishuman2);
+        playGame.player2.isHuman = false;
+        console.log(playGame.player2.isHuman);
     }
 
 
@@ -127,42 +126,44 @@ const playGame = (function(e) {
                 gameProgress.push([activePlayer.type, e.target.id]);
                 evalWinner();
                 changePlayer(player1, player2);
-                nextMove();
+                
             }
         })
     }
 
-    const makeComputerMove = function() {
-        console.log("does work")
+    function makeComputerMove() {
+        console.log("does work");
         const cellsToChoose = playGame.cells.filter(playGame.isEmpty);
         const computerChoice = cellsToChoose[Math.floor(Math.random() * cellsToChoose.length)];
+        displayController.setColor(computerChoice, activePlayer, player1, player2, "player1", "player2", "styling1", "styling2");
         computerChoice.textContent = "O";
         playGame.gameProgress.push([activePlayer.type, computerChoice.id]);
         evalWinner();  
         changePlayer(player1, player2);
-        nextMove();
-    }
+        
+    };
 
-    const nextMove = function() {
-        console.log("nextMove");
-        console.log(activePlayer);
-        console.log(ishuman2);
+    function nextMove() {
+    
         if(activePlayer === player1){
             makeHumanMove();
         }
         else if(activePlayer === player2){
-            if (ishuman2 === true){
+            if (activePlayer.isHuman === true){
                 makeHumanMove();
             }
-            else if(ishuman2 === false){
-                makeComputerMove();
+            else if(activePlayer.isHuman === false){
+                setTimeout(makeComputerMove, 1500);
             }
         }
     }
      
     
     const changePlayer = function(player1, player2) {
-        return (activePlayer = activePlayer.type === "X"?  player2 : player1);
+       
+        activePlayer = activePlayer.type === "X"?  player2 : player1;
+        activePlayer.active = true;
+        nextMove();
     };
 
     const isEmpty = (cell) => {
