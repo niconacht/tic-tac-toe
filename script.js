@@ -11,8 +11,7 @@ function newPlayer (type, active,isHuman) {
 
 //Display Module
 const displayController = (function(){
-   let name1 =  document.getElementById("player1").textContent;
-   let name2 = document.getElementById("player2").textContent;
+   
    function setColor(target, activeplayer, player1, player2, id1, id2, class1, class2) {
 
         if (activeplayer === player1) {
@@ -79,13 +78,13 @@ const displayController = (function(){
 
 
     function showResult(winner) {
+        const name1 =  document.getElementById("player1").textContent;
+        const name2 = document.getElementById("player2").textContent;
         document.querySelector("main").classList.add("hidden");
         const resultCard = document.getElementById("result-card")
         resultCard.classList.remove("hidden");
         const result = document.createElement("p");
         result.classList.add("result");
-        console.log(winner);
-        console.log(player1);
         if (winner === playGame.player1){
             result.textContent = `${name1} has won!`;
         }
@@ -136,7 +135,8 @@ const playGame = (function(e) {
 
    // if field is empty, player can place her symbol, store choice in array, change turn
    const makeHumanMove = function() {
-        document.addEventListener("click", function(e) {
+        const gameBoard = document.getElementById("gameboard");
+        gameBoard.addEventListener("click", function(e) {
             if (e.target.textContent === ""){
                 displayController.setColor(e.target, activePlayer, player1, player2, "player1", "player2", "styling1", "styling2");
                 e.target.textContent = activePlayer.type;
