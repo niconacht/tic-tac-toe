@@ -22,7 +22,7 @@ h1 {
     
 }
 
-main {
+main{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -112,6 +112,10 @@ main {
 .result {
     font-size: 5em;
     font-style: italic;
+    text-align: center;
+}
+.result-card {
+    text-align: center;
 }
 .card {
     width: 100vw; 

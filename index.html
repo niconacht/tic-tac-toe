@@ -25,26 +25,28 @@
             <div class="cell bottom left" id="6"></div>
             <div class="cell bottom middle" id="7"></div>
             <div class="cell bottom right" id="8"></div>  
-        </div>
-       
-        <div class="menu">
-            <button class="btn" id="settings-btn">Settings</button>
-            <button class="btn" id="reset-btn">Reset</button>
-        </div>
+        </div> 
     </main>
+    <div class="result-card hidden" id="result-card">
+        <p class="result" id="result"></p>
+    </div>
     <div class= "card hidden" id="settings-card">
         <form id="settings-form" method="post">
-            <label>Player1 Name<input type = "text" name="player1" class=" name-input sts" id="name1"></label>
-            <label>Player2 Name<input type = "text" name="player2" class="name-input sts" id="name2"></label>
+            <label>Player1 Name<input type = "text" name="player1" class=" name-input sts" id="name1" placeholder="a username"></label>
+            <label>Player2 Name<input type = "text" name="player2" class="name-input sts" id="name2" placeholder ="another username"></label>
             <button class="btn sts playerChoice" id="playAi">Play Against Computer?</button>
             <button class="btn sts playerChoice" id="playHuman">Play Against Human?</button>
             <button class="btn sts" id="cancel-btn">Cancel</button>
-            <button class="btn sts" id="save-btn">Save</button>
+            <input type="submit" value="Submit" class="btn sts" id="">
         </form>
     </div>
-
-    <div class="card hidden" id="result-card">
+    <div class="menu">
+        <button class="btn" id="settings-btn">Settings</button>
+        <button class="btn" id="reset-btn">Reset</button>
     </div>
+
+    <!-- <div class="card hidden" id="result-card">
+    </div> -->
   
     
     <script src="script.js"></script>
